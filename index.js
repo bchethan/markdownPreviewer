@@ -1,23 +1,37 @@
 const textarea = document.getElementById("textarea")
 const displaySide = document.getElementById("display-side")
 const clearBtn = document.getElementById("clear-btn")
-const h2Id = document.getElementById("h2-id")
-const pId = document.getElementById("p-id")
 
 textarea.addEventListener('input',callme)
-clearBtn.addEventListener('click',clearDisplay)
+clearBtn.addEventListener('click',clearPreview)
 
 function callme(){
     const text = (textarea.value).split(/[\r\n]+/g);
+    displaySide.innerHTML = ''
     text.filter((e)=>{
-        if(e.includes('# ')){
-                h2Id.innerHTML = `<h2>${e.replace('# ','')}</h2>`
+        //### is replaced with h4 
+        if(e.includes('### ')){
+                displaySide.innerHTML += `<h4>${e.replace('### ','')}</h4>`
+        }else if(e.includes('## ')){
+            displaySide.innerHTML += `<h3>${e.replace('## ','')}</h3>`
+        }else if(e.includes('# ')){
+            displaySide.innerHTML += `<h2>${e.replace('# ','')}</h2>`
+        }else if(getRandomBoldText(e)){
+            getRandomBoldText(e).map((f)=>{
+                displaySide.innerHTML += `<b>${f}</b>`
+            })
         }else{
-            pId.innerHTML = `<p>${e}</p>`
+            displaySide.innerHTML += `<p>${e}</p>`
         }
     })
 }
 
-function clearDisplay(){
+function clearPreview(){
     displaySide.innerText = ''
+    textarea.value = ''
+}
+
+function getRandomBoldText(input) {
+  const extracted = [...input.matchAll(/\*\*(.*?)\*\*/g)].map(m => m[1]);
+  return extracted.length === 0 ? null :extracted;
 }
