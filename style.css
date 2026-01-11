@@ -1,0 +1,25 @@
+body{
+    font-size: x-large;
+    padding: 0;
+}
+#container{
+    display: flex;
+}
+#display-side{
+    padding: 0 10px;
+    margin: 0px auto;
+}
+#textarea{
+    font-size: inherit;
+    width: 50vw;
+    height: 30vh;
+}
+button{
+    margin: auto;
+    border: none;
+    border-radius: 10px;
+    background-color: blueviolet;
+    color: white;
+    padding: 10px;
+    
+}
