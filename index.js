@@ -8,30 +8,41 @@ clearBtn.addEventListener('click',clearPreview)
 function callme(){
     const text = (textarea.value).split(/[\r\n]+/g);
     displaySide.innerHTML = ''
-    text.filter((e)=>{
-        //### is replaced with h4 
-        if(e.includes('### ')){
-                displaySide.innerHTML += `<h4>${e.replace('### ','')}</h4>`
-        }else if(e.includes('## ')){
-            displaySide.innerHTML += `<h3>${e.replace('## ','')}</h3>`
-        }else if(e.includes('# ')){
-            displaySide.innerHTML += `<h2>${e.replace('# ','')}</h2>`
-        }else if(getRandomBoldText(e)){
-            getRandomBoldText(e).map((f)=>{
-                displaySide.innerHTML += `<b>${f}</b>`
-            })
-        }else{
-            displaySide.innerHTML += `<p>${e}</p>`
-        }
+    text.forEach((e)=>{
+        let str = e
+
+        // processItalic(str) ? str = processItalic(str) : str
+        // getHeading(str) ? str = getHeading(str) : str
+        // processBold(str) ? str = processBold(str) : str
+
+        str = getHeading(str);
+        str = processBold(str);
+        str = processItalic(str);
+
+        displaySide.innerHTML += `${str}<br>`
     })
 }
 
 function clearPreview(){
-    displaySide.innerText = ''
+    displaySide.innerHTML = ''
     textarea.value = ''
 }
 
-function getRandomBoldText(input) {
-  const extracted = [...input.matchAll(/\*\*(.*?)\*\*/g)].map(m => m[1]);
-  return extracted.length === 0 ? null :extracted;
+function processBold(input) {
+  return input.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+}
+
+function processItalic(input) {
+  return input.replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, '<i>$1</i>');
+}
+
+function getHeading(input){
+    if(input.startsWith('# ')){
+        return `<h2>${input.slice(2)}</h2>`
+    }else if(input.startsWith('## ')){
+        return `<h3>${input.slice(3)}</h3>`
+    }else if(input.startsWith('### ')){
+        return `<h4>${input.slice(4)}</h4>`
+    }
+    return input;
 }
